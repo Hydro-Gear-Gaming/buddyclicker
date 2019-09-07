@@ -1,0 +1,104 @@
+<script>
+	var points = 1;
+	var incrementAmount = 1;
+	var clickIncome = 1;
+	var passiveIncome = 1;
+	var passiveDelay = 1000;
+
+	var scale = 1.1;
+
+	var passiveIncomeLevel = 0;
+	var passiveDelayLevel = 0;
+	var clickIncomeLevel = 0;	
+	
+	var passiveInterval = window.setInterval(() => increment(passiveIncome), passiveDelay);
+
+	function setPassive(amount, delay) {
+		clearInterval(passiveInterval);
+		passiveInterval = window.setInterval(() => increment(amount), delay);
+	}
+
+	function clicker() {
+		increment(clickIncome);
+	}
+
+	function renderPoints() {
+		document.getElementById("points").innerHTML = points.toFixed(0) + " (&beta;) Buddies";
+	}
+
+	function renderStats() {
+		var msg = "Passive Income: " + passiveIncome.toFixed(1) + "<br/>Passive Delay: " + passiveDelay.toFixed(5) + "<br/>Click Income: " + clickIncome;
+		document.getElementById("stats").innerHTML = msg;
+	}
+
+	function increment(amount) {
+		points += amount;
+		renderPoints();
+		renderStats();
+		renderButtons();
+	}
+
+	function renderButtons() {
+		document.getElementById("ipi").innerHTML = (Math.pow(scale, passiveIncomeLevel).toFixed(1)) + " (" + (Math.pow(scale, passiveIncomeLevel) * 500).toFixed(1);
+		document.getElementById("dpd").innerHTML = (500 * Math.pow(0.50, passiveDelayLevel)).toFixed(5) + " (" + (1000 * Math.pow(10, passiveDelayLevel));
+		document.getElementById("ici").innerHTML = 100;
+	}
+
+	function increasePassiveIncome() {
+		if(points >= Math.pow(scale, passiveIncomeLevel + 1) * 500) {
+			passiveIncomeLevel++;
+			passiveIncome += Math.pow(scale, passiveIncomeLevel);
+			points -= Math.pow(scale, passiveIncomeLevel) * 500;
+			renderStats();
+			setPassive(passiveIncome, passiveDelay);
+			renderPoints();
+			renderButtons();
+		}
+	}
+
+	function decreasePassiveDelay() {
+		if(points >= 1000 * Math.pow(10, passiveDelayLevel) && passiveDelay > 0) {
+			points -= (1000 * Math.pow(10, passiveDelayLevel));
+			passiveDelay -= (500 * Math.pow(0.50, passiveDelayLevel));
+			passiveDelayLevel++;
+			renderStats();
+			setPassive(passiveIncome, passiveDelay);
+			renderPoints();
+			renderButtons();
+		}
+	}
+
+	function increaseClickIncome() {
+		if(points >= 100) {
+			points -= 100;
+			clickIncome++;
+			renderPoints();
+			renderStats();
+			renderButtons();
+		}
+	}
+
+	window.onload = setPassive(passiveIncome, passiveDelay);
+	
+</script>
+<body style="text-align: center; align-content: center;">
+	<h1>Buddy Clicker :)</h1>
+	<style>
+		button { background: purple; }
+		button:active { background: white; }
+	</style>
+	<button style="width: 200px; height: 200px; cursor: pointer;" onClick="clicker()"></button>
+	<h1 id="points">0 Buddies</h1>
+	<h2 id="stats">Passive Income:<br/>Passive Delay:<br/>Click Income:</h2>
+	<div style="border: 1px solid black;">
+		<h3>Upgrades:</h3>
+		<h3>
+			<button onClick="increasePassiveIncome()" style="border: 1px solid red; cursor: pointer; background: white;">Increase Passive Income by <span id="ipi">100</span> (&beta;) Buddies)</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<button onClick="decreasePassiveDelay()" style="border: 1px solid green; cursor: pointer; background: white;">Decrease Passive Delay by <span id="dpd">100</span> (&beta;) Buddies)</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<button onClick="increaseClickIncome()" style="border: 1px solid blue; cursor: pointer; background: white;">Increase Click Income by 1 (<span id="ici">1 (20</span> (&beta;) Buddies)</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+		</h3>
+	</div>
+<body>
